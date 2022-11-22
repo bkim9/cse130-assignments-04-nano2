@@ -165,13 +165,52 @@ exitError (Error msg) = return (VErr msg)
 --------------------------------------------------------------------------------
 eval :: Env -> Expr -> Value
 --------------------------------------------------------------------------------
-eval = error "TBD:eval"
+eval _ (EInt n) = VInt n
+eval _ (EBool b) = VBool b 
+eval _ ENil = VNil
+eval env (EVar x) = lookupId x env
+eval env (EBin op e1 e2) = evalOp op (eval env e1) (eval env e2)
+eval env (EIf p t f)
+   | eval env p == VBool True =eval env t  --pattern matching
+   | otherwise = eval env f
+eval env (ELet x e1 e2)= eval ((x, eval env e1):env) e2
+eval env (ELam x e) = VClos env x e
+eval prelude (EApp (EVar "head") el) = vp (eval prelude el)
+  where
+    vph =  VPrim (\(VCons (VInt head) _) -> VInt head)
+    VPrim vp = eval [("prim",vph)] (EVar "prim")
+eval prelude (EApp (EVar "tail") el) = vp (eval prelude el)
+  where
+    vpt =  VPrim (\(VCons (VInt _) tail) -> tail)
+    VPrim vp = eval [("prim",vpt)] (EVar "prim")
+eval env (EApp (EVar f) e2) = eval ((f, eval env (EVar f)):((binder,eval env e2):env_old)) body
+   where
+     VClos env_old binder body = eval env (EVar f)
+eval env (EApp e1 e2) = eval ((binder,eval env e2):env_old) body
+   where
+     VClos env_old binder body = eval env e1
+-- eval prelude ((EVar p) (EVar xs)) = VInt (vp (eval prelude xs))
+--   where 
+--      vph = eval prelude "head"
+--      VPrim vp = eval [("prim", vph), ("xs", xs)] p
 
 --------------------------------------------------------------------------------
 evalOp :: Binop -> Value -> Value -> Value
 --------------------------------------------------------------------------------
-evalOp = error "TBD:evalOp"
-
+evalOp Plus (VInt v1) (VInt v2) = VInt (v1 + v2)
+evalOp Minus (VInt v1) (VInt v2) = VInt (v1 - v2)
+evalOp Mul (VInt v1) (VInt v2) = VInt (v1 * v2)
+evalOp And (VBool b1) (VBool b2) = VBool (b1 && b2)
+evalOp Or (VBool b1) (VBool b2) = VBool (b1 || b2)
+evalOp Eq (VInt i1) (VInt i2) = VBool (i1 == i2)
+evalOp Eq (VBool b1) (VBool b2) = VBool (b1 == b2)
+evalOp Ne (VInt i1) (VInt i2) = VBool (i1 /= i2)
+evalOp Ne (VBool b1) (VBool b2) = VBool (b1 /= b2)
+evalOp Lt (VInt v1) (VInt v2) = VBool (v1 < v2)
+evalOp Le (VInt v1) (VInt v2) = VBool (v1 <= v2)
+evalOp Cons (VInt v1) VNil = VCons (VInt v1) VNil
+evalOp Cons (VInt v1) (VCons v2 v3) = VCons (VInt v1) (VCons v2 v3)
+evalOp _ _ _ = throw (Error "type error: binop")
 --------------------------------------------------------------------------------
 -- | `lookupId x env` returns the most recent
 --   binding for the variable `x` (i.e. the first
@@ -189,13 +228,21 @@ evalOp = error "TBD:evalOp"
 --------------------------------------------------------------------------------
 lookupId :: Id -> Env -> Value
 --------------------------------------------------------------------------------
-lookupId = error "TBD:lookupId"
+lookupId x [] = throw (Error ("unbound variable: " ++ x))
+lookupId x (e:es)
+  | x == bind = body
+  | otherwise = lookupId x es
+    where
+      (bind, body) = e
 
 prelude :: Env
 prelude =
   [ -- HINT: you may extend this "built-in" environment
     -- with some "operators" that you find useful...
+    ("head",VClos [( "prim" ,VPrim (\(VCons (VInt head) _) -> VInt head))] "xs" (EApp (EVar "prim") (EVar "xs"))),
+    ("tail",VClos [( "prim" ,VPrim (\(VCons (VInt _) tail) -> tail))]      "xs" (EApp (EVar "prim") (EVar "xs")))
   ]
+
 
 env0 :: Env
 env0 =  [ ("z1", VInt 0)
