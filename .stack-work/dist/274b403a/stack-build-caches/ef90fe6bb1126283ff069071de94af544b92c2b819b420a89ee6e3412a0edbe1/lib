@@ -1,0 +1,22 @@
+C:\Users\beomsu_samsung\AppData\Local\Programs\stack\x86_64-windows\ghc-8.10.7\lib\include\ghcautoconf.h:
+  hash: 79e5e4547ee0149ae7d7de086912bed7ea8c6894ac2107020270012adf60994c
+C:\Users\beomsu_samsung\AppData\Local\Programs\stack\x86_64-windows\ghc-8.10.7\lib\include\ghcconfig.h:
+  hash: 03f4611ae97decc9e8c76c212bf7886d003b29d5c62b43fee6623a799f6e5fdf
+C:\Users\beomsu_samsung\AppData\Local\Programs\stack\x86_64-windows\ghc-8.10.7\lib\include\ghcplatform.h:
+  hash: f477a9511e644dcd8493ce71abbe8a25e28ab2522dd624d4e7ef9dbc1cc03fdf
+C:\Users\beomsu_samsung\AppData\Local\Programs\stack\x86_64-windows\ghc-8.10.7\lib\include\ghcversion.h:
+  hash: c013160c9aa8a98f4638616496dce720c23ceca8ef9d6b3212b654642fbda5e4
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\.stack-work\dist\274b403a\build\autogen\cabal_macros.h:
+  hash: 6f5e5e8310bb6f602860e489e556907a26a4ddb49d291e5845a47e8a24789747
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\README.md:
+  hash: 6d885d8f66aef480a37b4a073c3d87c4a393d8bc20ce025d7dce078d91921a4f
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\hw4-nano.cabal:
+  hash: 425cb08d2c70c0b28c7236d023706dc23bee54c745eaad46ac36b69a8a65444a
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\src\Language\Nano\Eval.hs:
+  hash: 96ec5613ee918c972a18a1e247fa39a85fb53a9496cc36d84dd78fa91031991f
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\src\Language\Nano\Lexer.x:
+  hash: 573f0c40bb4ede768609681a240ea34709b1ba1339c53502fd0e0204178896f5
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\src\Language\Nano\Parser.y:
+  hash: 45028f7b3f3fd78a53d4494c9ab846349dbff66f225b8995ceb5386788c476c1
+C:\Users\beomsu_samsung\Documents\GitHub\cse130-assignments-04-nano2\src\Language\Nano\Types.hs:
+  hash: 0c04526fe84d8ee521d48e3124e1e26d6a4c2b2419e70ea45ec144c05a653a8e

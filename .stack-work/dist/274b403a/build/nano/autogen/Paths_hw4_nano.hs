@@ -30,7 +30,7 @@ version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\bin"
-libdir     = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\lib\\x86_64-windows-ghc-8.10.7\\hw4-nano-0.1.0.0-7jsWWqPrfC1Bbp0Iw8x8Ml-nano"
+libdir     = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\lib\\x86_64-windows-ghc-8.10.7\\hw4-nano-0.1.0.0-4z6mCFnyr6a3UHQTVTZBcJ-nano"
 dynlibdir  = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\lib\\x86_64-windows-ghc-8.10.7"
 datadir    = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\share\\x86_64-windows-ghc-8.10.7\\hw4-nano-0.1.0.0"
 libexecdir = "C:\\Users\\beomsu_samsung\\Documents\\GitHub\\cse130-assignments-04-nano2\\.stack-work\\install\\5588a557\\libexec\\x86_64-windows-ghc-8.10.7\\hw4-nano-0.1.0.0"
