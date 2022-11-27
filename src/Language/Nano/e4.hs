@@ -1,0 +1,47 @@
+-- let e4 = ELet "l" ( EBin Cons (EInt 1)  ( EBin Cons (EInt 2) (EBin Cons (EInt 3) (EBin Cons (EInt 4) ENil)))) (EApp (EApp (EVar "map")(EVar "incr")) (EVar "l"))
+        
+
+
+--       (
+--               ELet "l" 
+--               (
+--                       EBin Cons 
+--                       (
+--                               EInt 1
+--                       ) 
+--                       (
+--                               EBin Cons 
+--                               (
+--                                       EInt 2
+--                               ) 
+--                               (
+--                                       EBin Cons 
+--                                       (
+--                                                EInt 3
+--                                       ) 
+--                                       (
+--                                                EBin Cons 
+--                                                (
+--                                                        EInt 4
+--                                                ) 
+--                                                ENil
+--                                       )
+--                               )
+--                      )
+--              ) 
+--              (
+--                      EApp 
+--                      (
+--                              EApp 
+--                              (
+--                                      EVar "map"
+--                              )
+--                              (
+--                                      EVar "incr"
+--                              )
+--                      ) 
+--                      (
+--                              EVar "l"
+--                      )
+--              )
+--        )

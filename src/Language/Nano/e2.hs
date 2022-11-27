@@ -1,0 +1,61 @@
+-- let e2 = ELet "incr" (ELam "x" (EBin Plus (EVar "x") (EInt 1))) (ELet "l" (EBin Cons (EInt 1) (EBin Cons (EInt 2) (EBin Cons (EInt 3) (EBin Cons (EInt 4) ENil)))) (EApp (EApp (EVar "map")(EVar "incr")) (EVar "l")))
+
+
+-- (
+--       ELet "incr" 
+--       (
+--               ELam "x" 
+--               (        
+--                       EBin Plus 
+--                       (
+--                               EVar "x"
+--                       ) 
+--                       (
+--                               EInt 1
+--                       )
+--               )
+--       ) 
+--       (
+--               ELet "l" 
+--               (
+--                       EBin Cons 
+--                       (
+--                               EInt 1
+--                       ) 
+--                       (
+--                               EBin Cons 
+--                               (
+--                                       EInt 2
+--                               ) 
+--                               (
+--                                       EBin Cons 
+--                                       (
+--                                                EInt 3
+--                                       ) 
+--                                       (
+--                                                EBin Cons 
+--                                                (
+--                                                        EInt 4
+--                                                ) 
+--                                                ENil
+--                                       )
+--                               )
+--                      )
+--              ) 
+--              (
+--                      EApp 
+--                      (
+--                              EApp 
+--                              (
+--                                      EVar "map"
+--                              )
+--                              (
+--                                      EVar "incr"
+--                              )
+--                      ) 
+--                      (
+--                              EVar "l"
+--                      )
+--              )
+--        )
+-- )

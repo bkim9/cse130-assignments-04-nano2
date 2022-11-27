@@ -82,6 +82,79 @@ execExpr e = return (eval prelude e) `catch` exitError
 -- >>> parse "[1,3,5]"
 -- EBin Cons (EInt 1) (EBin Cons (EInt 3) (EBin Cons (EInt 5) ENil))
 
+-- >>> parse "let map f xs = if xs ==[] then [] else let h = head xs in let t = tail xs in f h: map f t in let incr x = x+1 in let l = [1,2,3,4] in map incr l"
+-- ELet "map" 
+-- 
+
+-- >>> let ecal = EBin Cons (EApp (EVar "f") (EVar "h")) (EApp (EApp (EVar "map") (EVar "f")) (EVar "t"))
+-- >>> let e1 = ELam "f" (ELam "xs" (EIf (EBin Eq (EVar "xs") ENil) ENil (ELet "h" (EApp (EVar "head") ( EVar "xs")) (ELet "t" (EApp (EVar "tail") (EVar "xs")) (ecal)))))
+-- >>> eval [] e1
+-- <<{  }, \f -> ELam "xs" (EIf (EBin Eq (EVar "xs") ENil) ENil (ELet "h" (EApp (EVar "head") (EVar "xs")) (ELet "t" (EApp (EVar "tail") (EVar "xs")) (EBin Cons (EApp (EVar "f") (EVar "h")) (EApp (EApp (EVar "map") (EVar "f")) (EVar "t"))))))>>
+
+-- >>> let e3 = ELam "x" (EBin Plus (EVar "x") (EInt 1))
+-- >>> let e4 = ELet "l" ( EBin Cons (EInt 1)  (EBin Cons (EInt 2) (EBin Cons (EInt 3) (EBin Cons (EInt 4) ENil)))) (EApp (EApp (EVar "map")(EVar "incr")) (EVar "l"))
+-- >>> let e2 = ELet e3 e4
+-- >>> eval [] e1
+
+-- >>> let el = EBin Cons (EInt 1) (EBin Cons (EInt 2) ( EBin Cons (EInt 3) (EBin Cons (EInt 4) ENil)))
+-- >>> let ehead = EApp (EVar "head")(EVar "xs")
+-- >>> let etail = EApp (EVar "tail")(EVar "xs")
+-- >>> eval [("xs",eval [] el)] ehead
+-- >>> eval [("xs",eval [] el)] etail
+-- 1
+-- (2 : (3 : (4 : [])))
+
+-- >>> parse "let f x = x in f h : map f t"
+-- EBin Cons (EApp (EVar "f") (EVar "h")) (EApp (EApp (EVar "map") (EVar "f")) (EVar "t"))
+
+
+-- >>> let el = EBin Cons (EInt 1) (EBin Cons (EInt 2) ( EBin Cons (EInt 3) (EBin Cons (EInt 4) ENil)))
+-- >>> eval [] el
+-- (1 : (2 : (3 : (4 : []))))
+
+-- >>> let einc = ELam "x" (EBin Plus (EVar "x") (EInt 1))
+-- >>> eval [] einc  
+-- <<{  }, \x -> EBin Plus (EVar "x") (EInt 1)>>
+
+-- ) 
+-- (
+--       ELet "incr" 
+--       (
+--               einc
+--       ) 
+--       (
+--               ELet "l" 
+--               (
+--                      el
+--               ) 
+--               (
+--                      EApp 
+--                      (
+--                              EApp 
+--                              (
+--                                      EVar "map"
+--                              )
+--                              (
+--                                      EVar "incr"
+--                              )
+--                      ) 
+--                      (
+--                              EVar "l"
+--                      )
+--              )
+--        )
+-- )
+
+
+-- >>> parse "(f h) : (map f t)"
+-- EBin Cons (EApp (EVar "f") (EVar "h")) (EApp (EApp (EVar "map") (EVar "f")) (EVar "t"))
+
+-- >>> execExpr EBin Cons (EApp (EVar "f") (EVar "h")) (EApp (EApp (EVar "map") (EVar "f")) (EVar "t"))
+-- Couldn't match expected type ‘Binop -> Expr -> Expr -> t’
+--             with actual type ‘IO Value’
+-- Couldn't match expected type ‘Expr’
+--             with actual type ‘Binop -> Expr -> Expr -> Expr’
+
 --------------------------------------------------------------------------------
 parse :: String -> Expr
 --------------------------------------------------------------------------------
@@ -369,7 +442,20 @@ eval env (EApp e1 e2) = eval ((binder,eval env e2):env_old) body
 -- >>> (eval [("v", VNil)] (EVar "v")) == VNil
 -- True
 
+-- >>> evalOp Eq (VCons (VInt 1) VNil) (VCons (VInt 1) VNil)
+-- True
 
+-- >>> evalOp Eq (VCons (VInt 1) VNil) (VCons (VInt 2) VNil)
+-- False
+
+-- >>> evalOp Eq VNil (VCons (VInt 1) VNil)
+-- False
+
+-- >>> evalOp Eq (VCons (VInt 1) VNil) VNil
+-- False
+
+-- >>> evalOp Eq VNil VNil
+-- True
 
 
 -- >>> eval env0 (EApp (EVar "f") (EInt 2)) 
@@ -388,13 +474,21 @@ evalOp And (VBool b1) (VBool b2) = VBool (b1 && b2)
 evalOp Or (VBool b1) (VBool b2) = VBool (b1 || b2)
 evalOp Eq (VInt i1) (VInt i2) = VBool (i1 == i2)
 evalOp Eq (VBool b1) (VBool b2) = VBool (b1 == b2)
+evalOp Eq VNil VNil = VBool True
+evalOp Eq (VCons _ _) VNil = VBool False
+evalOp Eq VNil (VCons _ _) = VBool False
+evalOp Eq (VCons h1 t1) (VCons h2 t2) 
+  | h1 == h2  = evalOp Eq t1 t2
+  | otherwise = VBool False
 evalOp Ne (VInt i1) (VInt i2) = VBool (i1 /= i2)
 evalOp Ne (VBool b1) (VBool b2) = VBool (b1 /= b2)
 evalOp Lt (VInt v1) (VInt v2) = VBool (v1 < v2)
 evalOp Le (VInt v1) (VInt v2) = VBool (v1 <= v2)
 evalOp Cons (VInt v1) VNil = VCons (VInt v1) VNil
 evalOp Cons (VInt v1) (VCons v2 v3) = VCons (VInt v1) (VCons v2 v3)
-evalOp _ _ _ = throw (Error "type error: binop")
+evalOp Cons _ _ = throw (Error "type error: binop with cons")
+evalOp Eq _ _ = throw(Error "type error: binop with equal")
+evalOp _ _ _ = throw(Error "type error: binop with other than cons or equal")
 
 --------------------------------------------------------------------------------
 -- | `lookupId x env` returns the most recent
